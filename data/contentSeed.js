@@ -1,0 +1,280 @@
+export const SITE_SETTINGS_SEED = [
+  {
+    key: 'hero',
+    value: {
+      lines: ['We are a brand', 'of collective', 'creativity'],
+      footer: {
+        left: { strong: 'Based in London', text: 'Born in Tokyo' },
+        center: { strong: 'Design-driven', text: 'creative agency' },
+        right: { strong: 'Branding, digital', text: 'and communications' },
+      },
+    },
+  },
+  {
+    key: 'about_overview',
+    value: {
+      eyebrow: 'STUDIO PHILOSOPHY',
+      title: 'WE BUILD DIGITAL UNIVERSES THAT DEMAND TO BE FELT.',
+      titleHighlight: 'DIGITAL UNIVERSES',
+      body: "AYUTA is a collective of designers, thinkers, and explorers. We don't just build websites; we craft immersive journeys. Our approach combines cinematic storytelling with precision-engineered technology to create experiences that resonate on a primal level.",
+      stats: [
+        { value: '12+', label: 'Awards Won' },
+        { value: '8Y', label: 'Experience' },
+      ],
+      image: 'https://images.unsplash.com/photo-1498050108023-c5249f4df085?q=80&w=2672&auto=format&fit=crop',
+      imageCaption: 'JKT • SCBD • 2026',
+    },
+  },
+  {
+    key: 'achievements',
+    value: {
+      items: [
+        { label: 'Creative Visions', value: 150, suffix: '+' },
+        { label: 'Global Partnerships', value: 85, suffix: '' },
+        { label: 'Awwwards Recognitions', value: 12, suffix: 'x' },
+        { label: 'Crafted Interfaces', value: 2, suffix: 'K+' },
+      ],
+    },
+  },
+  {
+    key: 'partners',
+    value: {
+      names: ['SONY', 'NETFLIX', 'SPACEX', 'APPLE', 'NIKE', 'GOOGLE', 'SPOTIFY', 'AMAZON', 'META', 'TESLA'],
+    },
+  },
+];
+
+export const CONTENT_ITEMS_SEED = [
+  {
+    section: 'philosophy',
+    sortOrder: 0,
+    title: 'AYUTA PARK',
+    body: 'Immersive destination experience with modern atmosphere.',
+    image: 'https://www.ayuta.id/wp-content/uploads/2020/03/ayutaPark.png',
+  },
+  {
+    section: 'philosophy',
+    sortOrder: 1,
+    title: 'AGRICULTURE',
+    body: 'Future farming ecosystem blended with sustainability.',
+    image: 'https://www.ayuta.id/wp-content/uploads/2020/03/ayutaAgriculture.png',
+  },
+  {
+    section: 'philosophy',
+    sortOrder: 2,
+    title: 'CULINARY',
+    body: 'Crafting memorable taste and premium culinary moments.',
+    image: 'https://www.ayuta.id/wp-content/uploads/2020/03/ayutaCulinary.png',
+  },
+  {
+    section: 'philosophy',
+    sortOrder: 3,
+    title: 'AYUTA HOUSE',
+    body: 'Luxury living space with artistic architectural soul.',
+    image: 'https://www.ayuta.id/wp-content/uploads/2020/04/ayuta-HouseHouse-1.png',
+  },
+  {
+    section: 'philosophy',
+    sortOrder: 4,
+    title: 'DIGITAL',
+    body: 'Technology-driven creative innovation for modern brands.',
+    image: 'https://www.ayuta.id/wp-content/uploads/2020/03/ayutaDigital.png',
+  },
+  {
+    section: 'philosophy',
+    sortOrder: 5,
+    title: 'TOURISM',
+    body: 'Exploring culture, nature, and unforgettable journeys.',
+    image: 'https://www.ayuta.id/wp-content/uploads/2020/03/ayutaAyuta-Tourism.png',
+  },
+  {
+    section: 'philosophy',
+    sortOrder: 6,
+    title: 'EVENT',
+    body: 'Creating impactful experiences through spectacular events.',
+    image: 'https://www.ayuta.id/wp-content/uploads/2020/03/ayutaEvent.png',
+  },
+  {
+    section: 'team',
+    sortOrder: 0,
+    image: 'https://images.unsplash.com/photo-1522071820081-009f0129c71c?q=80&w=2670&auto=format&fit=crop',
+    metadata: { alt: 'Team' },
+  },
+  {
+    section: 'team',
+    sortOrder: 1,
+    image: 'https://images.unsplash.com/photo-1552664730-d307ca884978?q=80&w=2670&auto=format&fit=crop',
+    metadata: { alt: 'Team' },
+  },
+  {
+    section: 'team',
+    sortOrder: 2,
+    image: 'https://images.unsplash.com/photo-1556761175-b413da4baf72?q=80&w=2574&auto=format&fit=crop',
+    metadata: { alt: 'Team' },
+  },
+  {
+    section: 'team',
+    sortOrder: 3,
+    image: 'https://images.unsplash.com/photo-1522202176988-66273c2fd55f?q=80&w=2671&auto=format&fit=crop',
+    metadata: { alt: 'Team' },
+  },
+  {
+    section: 'member',
+    sortOrder: 0,
+    image: 'https://pbs.twimg.com/media/G6dpB9JaAAA2wDS?format=png&name=360x360',
+  },
+  {
+    section: 'member',
+    sortOrder: 1,
+    image: 'https://pbs.twimg.com/media/G6dpEiebIAEHrOS?format=jpg&name=360x360',
+  },
+  {
+    section: 'member',
+    sortOrder: 2,
+    image: 'https://pbs.twimg.com/media/G6dpGJZbsAEg1tp?format=png&name=360x360',
+  },
+  {
+    section: 'member',
+    sortOrder: 3,
+    image: 'https://pbs.twimg.com/media/G6dpHzVbkAERJI3?format=png&name=360x360',
+  },
+  {
+    section: 'member',
+    sortOrder: 4,
+    image: 'https://pbs.twimg.com/media/G6dpKpcbgAAj7ce?format=png&name=360x360',
+  },
+  {
+    section: 'member',
+    sortOrder: 5,
+    image: 'https://pbs.twimg.com/media/G6dpNYzawAAniIt?format=png&name=360x360',
+  },
+  {
+    section: 'member',
+    sortOrder: 6,
+    image: 'https://pbs.twimg.com/media/G6dpPilbcAAH3jU?format=jpg&name=360x360',
+  },
+  {
+    section: 'member',
+    sortOrder: 7,
+    image: 'https://pbs.twimg.com/media/G6dpRFBbsAEvquO?format=jpg&name=360x360',
+  },
+  {
+    section: 'member',
+    sortOrder: 8,
+    image: 'https://pbs.twimg.com/media/G6dpUL-aUAAUqGZ?format=png&name=small',
+  },
+  {
+    section: 'about_parallax',
+    sortOrder: 0,
+    image: 'https://images.unsplash.com/photo-1497366216548-37526070297c?q=80&w=1600&auto=format&fit=crop',
+    metadata: { alt: 'Studio' },
+  },
+  {
+    section: 'about_parallax',
+    sortOrder: 1,
+    image: 'https://images.unsplash.com/photo-1556761175-b413da4baf72?q=80&w=1600&auto=format&fit=crop',
+    metadata: { alt: 'Creative team' },
+  },
+  {
+    section: 'about_parallax',
+    sortOrder: 2,
+    image: 'https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?q=80&w=1600&auto=format&fit=crop',
+    metadata: { alt: 'Workspace' },
+  },
+  {
+    section: 'about_parallax',
+    sortOrder: 3,
+    image: 'https://images.unsplash.com/photo-1552664730-d307ca884978?q=80&w=1600&auto=format&fit=crop',
+    metadata: { alt: 'Meeting' },
+  },
+  {
+    section: 'about_parallax',
+    sortOrder: 4,
+    image: 'https://images.unsplash.com/photo-1521737604893-d14cc237f11d?q=80&w=1600&auto=format&fit=crop',
+    metadata: { alt: 'Team' },
+  },
+  {
+    section: 'about_parallax',
+    sortOrder: 5,
+    image: 'https://images.unsplash.com/photo-1519389950473-47ba0277781c?q=80&w=1600&auto=format&fit=crop',
+    metadata: { alt: 'Digital work' },
+  },
+  {
+    section: 'about_parallax',
+    sortOrder: 6,
+    image: 'https://images.unsplash.com/photo-1559136555-9303baea8ebd?q=80&w=1600&auto=format&fit=crop',
+    metadata: { alt: 'Project' },
+  },
+  {
+    section: 'about_value',
+    sortOrder: 0,
+    title: 'Craftsmanship',
+    body: 'Every pixel is placed with intentionality and purpose.',
+  },
+  {
+    section: 'about_value',
+    sortOrder: 1,
+    title: 'Innovation',
+    body: 'Pushing the boundaries of what is possible in the browser.',
+  },
+  {
+    section: 'about_value',
+    sortOrder: 2,
+    title: 'Authenticity',
+    body: 'Building experiences that are true to the human spirit.',
+  },
+  {
+    section: 'about_value',
+    sortOrder: 3,
+    title: 'Excellence',
+    body: 'Settling for nothing less than awwwards-worthy quality.',
+  },
+  {
+    section: 'partner',
+    sortOrder: 0,
+    title: 'Sony',
+    image: 'https://upload.wikimedia.org/wikipedia/commons/c/ca/Sony_logo.svg',
+  },
+  {
+    section: 'partner',
+    sortOrder: 1,
+    title: 'Netflix',
+    image: 'https://upload.wikimedia.org/wikipedia/commons/0/08/Netflix_2015_logo.svg',
+  },
+  {
+    section: 'partner',
+    sortOrder: 2,
+    title: 'SpaceX',
+    image: 'https://upload.wikimedia.org/wikipedia/commons/2/2e/SpaceX_logo_black.svg',
+  },
+  {
+    section: 'partner',
+    sortOrder: 3,
+    title: 'Apple',
+    image: 'https://upload.wikimedia.org/wikipedia/commons/f/fa/Apple_logo_black.svg',
+  },
+  {
+    section: 'partner',
+    sortOrder: 4,
+    title: 'Nike',
+    image: 'https://upload.wikimedia.org/wikipedia/commons/a/a6/Logo_NIKE.svg',
+  },
+  {
+    section: 'partner',
+    sortOrder: 5,
+    title: 'Google',
+    image: 'https://upload.wikimedia.org/wikipedia/commons/2/2f/Google_2015_logo.svg',
+  },
+  {
+    section: 'partner',
+    sortOrder: 6,
+    title: 'Spotify',
+    image: 'https://upload.wikimedia.org/wikipedia/commons/2/26/Spotify_logo_with_text.svg',
+  },
+  {
+    section: 'partner',
+    sortOrder: 7,
+    title: 'Amazon',
+    image: 'https://upload.wikimedia.org/wikipedia/commons/a/a9/Amazon_logo.svg',
+  },
+];
