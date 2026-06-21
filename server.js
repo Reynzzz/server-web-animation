@@ -15,7 +15,12 @@ const app = express();
 const PORT = process.env.PORT || 5000;
 
 app.use(cors({
-  origin: '*',
+  origin: [
+    'http://localhost:3000',       // FE Local 1 (misal: fe-user lokal)
+    'http://localhost:3001',       // FE Local 2 (misal: fe-admin lokal)
+    'http://103.150.92.197:3000',   // FE User di VPS (sesuaikan portnya nanti jika beda)
+    'http://103.150.92.197:3001'    // FE Admin di VPS (sesuaikan portnya nanti jika beda)
+  ],
   credentials: true
 }));
 app.use(express.json());
