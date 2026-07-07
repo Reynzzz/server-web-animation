@@ -1,6 +1,13 @@
 import Project from '../models/Project.js';
 import { slugify } from '../helpers/slugHelper.js';
 
+function extractYoutubeId(url) {
+  if (!url) return '';
+  // Try to match standard YouTube URLs and extract the 11-character ID
+  const match = url.match(/(?:https?:\/\/)?(?:www\.)?(?:youtube\.com\/(?:[^\/\n\s]+\/\S+\/|(?:v|e(?:mbed)?)\/|\S*?[?&]v=)|youtu\.be\/)([a-zA-Z0-9_-]{11})/);
+  return match ? match[1] : url; // if no match, just return the input (might already be an ID)
+}
+
 export const getAllProjects = async (req, res) => {
   try {
     const projects = await Project.findAll({ order: [['id', 'ASC']] });
@@ -35,7 +42,8 @@ export const createProject = async (req, res) => {
       description,
       heroImage: heroImageUrl,
       gallery: galleryUrls,
-      stats: statsRaw
+      stats: statsRaw,
+      video: videoInput
     } = req.body;
 
     if (!title || !category) {
@@ -94,7 +102,8 @@ export const createProject = async (req, res) => {
       description,
       heroImage,
       gallery,
-      stats
+      stats,
+      video: extractYoutubeId(videoInput)
     });
 
     return res.status(201).json(project);
@@ -121,7 +130,8 @@ export const updateProject = async (req, res) => {
       description,
       heroImage: heroImageUrl,
       gallery: galleryUrls,
-      stats: statsRaw
+      stats: statsRaw,
+      video: videoInput
     } = req.body;
 
     if (title) {
@@ -147,6 +157,7 @@ export const updateProject = async (req, res) => {
     if (client !== undefined) project.client = client;
     if (role !== undefined) project.role = role;
     if (description !== undefined) project.description = description;
+    if (videoInput !== undefined) project.video = extractYoutubeId(videoInput);
 
     // Hero Image
     if (req.files && req.files.heroImageFile && req.files.heroImageFile[0]) {

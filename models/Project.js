@@ -46,6 +46,9 @@ const Project = sequelize.define('Project', {
     type: DataTypes.JSON,
     defaultValue: [],
   },
+  video: {
+    type: DataTypes.STRING,
+  },
 });
 
 export default Project;
