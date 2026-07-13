@@ -49,6 +49,10 @@ const Project = sequelize.define('Project', {
   video: {
     type: DataTypes.STRING,
   },
+  galleryCaption: {
+    type: DataTypes.TEXT,
+    defaultValue: '',
+  },
 });
 
 export default Project;

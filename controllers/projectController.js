@@ -40,6 +40,7 @@ export const createProject = async (req, res) => {
       client,
       role,
       description,
+      galleryCaption,
       heroImage: heroImageUrl,
       gallery: galleryUrls,
       stats: statsRaw,
@@ -100,6 +101,7 @@ export const createProject = async (req, res) => {
       client,
       role,
       description,
+      galleryCaption: galleryCaption || '',
       heroImage,
       gallery,
       stats,
@@ -128,6 +130,7 @@ export const updateProject = async (req, res) => {
       client,
       role,
       description,
+      galleryCaption,
       heroImage: heroImageUrl,
       gallery: galleryUrls,
       stats: statsRaw,
@@ -157,6 +160,7 @@ export const updateProject = async (req, res) => {
     if (client !== undefined) project.client = client;
     if (role !== undefined) project.role = role;
     if (description !== undefined) project.description = description;
+    if (galleryCaption !== undefined) project.galleryCaption = galleryCaption;
     if (videoInput !== undefined) project.video = extractYoutubeId(videoInput);
 
     // Hero Image
