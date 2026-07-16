@@ -1,157 +1,129 @@
 import Project from '../models/Project.js';
-import { slugify } from '../helpers/slugHelper.js';
+import { Op } from 'sequelize';
+import fs from 'fs';
+import path from 'path';
+import { fileURLToPath } from 'url';
 
-function extractYoutubeId(url) {
-  if (!url) return '';
-  // Try to match standard YouTube URLs and extract the 11-character ID
-  const match = url.match(/(?:https?:\/\/)?(?:www\.)?(?:youtube\.com\/(?:[^\/\n\s]+\/\S+\/|(?:v|e(?:mbed)?)\/|\S*?[?&]v=)|youtu\.be\/)([a-zA-Z0-9_-]{11})/);
-  return match ? match[1] : url; // if no match, just return the input (might already be an ID)
-}
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+const generateSlug = async (title, currentId = null) => {
+  let baseSlug = title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+  if (!baseSlug) baseSlug = 'project';
+  
+  let slug = baseSlug;
+  let counter = 1;
+  while (true) {
+    const whereClause = { slug };
+    if (currentId) {
+      whereClause.id = { [Op.ne]: currentId };
+    }
+    const existing = await Project.findOne({ where: whereClause });
+    if (!existing) {
+      break;
+    }
+    slug = `${baseSlug}-${counter}`;
+    counter++;
+  }
+  return slug;
+};
+
+const parseJsonField = (raw, fallback) => {
+  if (raw === undefined || raw === null || raw === '') return fallback;
+  if (typeof raw === 'object') return raw;
+  try {
+    return JSON.parse(raw);
+  } catch {
+    return fallback;
+  }
+};
 
 export const getAllProjects = async (req, res) => {
   try {
-    const projects = await Project.findAll({ order: [['id', 'ASC']] });
+    const projects = await Project.findAll({
+      order: [['sortOrder', 'ASC'], ['createdAt', 'DESC']],
+    });
     return res.status(200).json(projects);
   } catch (error) {
+    console.error(error);
     return res.status(500).json({ message: 'Server error.', error: error.message });
   }
 };
 
 export const getProjectBySlug = async (req, res) => {
-  const { slug } = req.params;
   try {
-    const project = await Project.findOne({ where: { slug } });
+    const project = await Project.findOne({ where: { slug: req.params.slug } });
     if (!project) {
       return res.status(404).json({ message: 'Project not found.' });
     }
     return res.status(200).json(project);
   } catch (error) {
+    console.error(error);
     return res.status(500).json({ message: 'Server error.', error: error.message });
   }
 };
 
 export const createProject = async (req, res) => {
   try {
-    const {
-      title,
-      category,
-      color,
-      year,
-      client,
-      role,
-      description,
-      galleryCaption,
-      heroImage: heroImageUrl,
-      gallery: galleryUrls,
-      stats: statsRaw,
-      video: videoInput
-    } = req.body;
-
-    if (!title || !category) {
-      return res.status(400).json({ message: 'Title and category are required.' });
-    }
-
-    // Generate slug from title
-    let slug = slugify(title);
-    // Ensure unique slug
-    let slugExists = await Project.findOne({ where: { slug } });
-    let counter = 1;
-    while (slugExists) {
-      slug = `${slugify(title)}-${counter}`;
-      slugExists = await Project.findOne({ where: { slug } });
-      counter++;
-    }
-
-    // Process Hero Image
-    let heroImage = heroImageUrl || '';
-    if (req.files && req.files.heroImageFile && req.files.heroImageFile[0]) {
+    const { title, category, color, year, client, role, description, galleryCaption, video, sortOrder } = req.body;
+    let heroImage = req.body.heroImage || '';
+    
+    if (req.files && req.files.heroImageFile && req.files.heroImageFile.length > 0) {
       heroImage = `/uploads/${req.files.heroImageFile[0].filename}`;
     }
 
-    // Process Gallery
-    let gallery = [];
-    if (galleryUrls) {
-      try {
-        gallery = typeof galleryUrls === 'string' ? JSON.parse(galleryUrls) : galleryUrls;
-      } catch (e) {
-        gallery = [galleryUrls];
+    let gallery = parseJsonField(req.body.gallery, []);
+    
+    if (req.files && req.files.galleryFiles && req.files.galleryFiles.length > 0) {
+      for (const file of req.files.galleryFiles) {
+        gallery.push(`/uploads/${file.filename}`);
       }
-    }
-    if (req.files && req.files.galleryFiles) {
-      const uploadedPaths = req.files.galleryFiles.map(file => `/uploads/${file.filename}`);
-      gallery = [...gallery, ...uploadedPaths];
     }
 
-    // Process Stats
-    let stats = [];
-    if (statsRaw) {
-      try {
-        stats = typeof statsRaw === 'string' ? JSON.parse(statsRaw) : statsRaw;
-      } catch (e) {
-        stats = [];
-      }
+    const stats = parseJsonField(req.body.stats, []);
+    
+    if (!title) {
+      return res.status(400).json({ message: 'Title is required.' });
     }
+
+    const slug = await generateSlug(title);
 
     const project = await Project.create({
-      slug,
       title,
-      category,
-      color,
-      year,
-      client,
-      role,
-      description,
+      slug,
+      category: category || '',
+      color: color || '',
+      year: year || '',
+      client: client || '',
+      role: role || '',
+      description: description || '',
       galleryCaption: galleryCaption || '',
+      video: video || '',
       heroImage,
       gallery,
       stats,
-      video: extractYoutubeId(videoInput)
+      sortOrder: sortOrder !== undefined ? parseInt(sortOrder, 10) : 0,
     });
 
     return res.status(201).json(project);
   } catch (error) {
+    console.error(error);
     return res.status(500).json({ message: 'Server error.', error: error.message });
   }
 };
 
 export const updateProject = async (req, res) => {
-  const { id } = req.params;
   try {
-    const project = await Project.findByPk(id);
+    const project = await Project.findByPk(req.params.id);
     if (!project) {
       return res.status(404).json({ message: 'Project not found.' });
     }
 
-    const {
-      title,
-      category,
-      color,
-      year,
-      client,
-      role,
-      description,
-      galleryCaption,
-      heroImage: heroImageUrl,
-      gallery: galleryUrls,
-      stats: statsRaw,
-      video: videoInput
-    } = req.body;
+    const { title, category, color, year, client, role, description, galleryCaption, video, sortOrder } = req.body;
 
-    if (title) {
-      const oldTitle = project.title;
+    if (title && title !== project.title) {
       project.title = title;
-      // If title changed, update slug
-      if (title.toLowerCase() !== oldTitle.toLowerCase()) {
-        let slug = slugify(title);
-        let slugExists = await Project.findOne({ where: { slug } });
-        let counter = 1;
-        while (slugExists && slugExists.id !== project.id) {
-          slug = `${slugify(title)}-${counter}`;
-          slugExists = await Project.findOne({ where: { slug } });
-          counter++;
-        }
-        project.slug = slug;
-      }
+      project.slug = await generateSlug(title, project.id);
     }
 
     if (category !== undefined) project.category = category;
@@ -161,56 +133,46 @@ export const updateProject = async (req, res) => {
     if (role !== undefined) project.role = role;
     if (description !== undefined) project.description = description;
     if (galleryCaption !== undefined) project.galleryCaption = galleryCaption;
-    if (videoInput !== undefined) project.video = extractYoutubeId(videoInput);
+    if (video !== undefined) project.video = video;
+    if (sortOrder !== undefined) project.sortOrder = parseInt(sortOrder, 10);
 
-    // Hero Image
-    if (req.files && req.files.heroImageFile && req.files.heroImageFile[0]) {
+    if (req.files && req.files.heroImageFile && req.files.heroImageFile.length > 0) {
       project.heroImage = `/uploads/${req.files.heroImageFile[0].filename}`;
-    } else if (heroImageUrl !== undefined) {
-      project.heroImage = heroImageUrl;
+    } else if (req.body.heroImage !== undefined) {
+      project.heroImage = req.body.heroImage;
     }
 
-    // Gallery
-    let newGallery = project.gallery || [];
-    if (galleryUrls !== undefined) {
-      try {
-        newGallery = typeof galleryUrls === 'string' ? JSON.parse(galleryUrls) : galleryUrls;
-      } catch (e) {
-        newGallery = [galleryUrls];
-      }
+    if (req.body.gallery !== undefined) {
+      project.gallery = parseJsonField(req.body.gallery, []);
     }
-    if (req.files && req.files.galleryFiles) {
-      const uploadedPaths = req.files.galleryFiles.map(file => `/uploads/${file.filename}`);
-      newGallery = [...newGallery, ...uploadedPaths];
+    
+    if (req.files && req.files.galleryFiles && req.files.galleryFiles.length > 0) {
+      const newGalleryFiles = req.files.galleryFiles.map(file => `/uploads/${file.filename}`);
+      project.gallery = [...(project.gallery || []), ...newGalleryFiles];
     }
-    project.gallery = newGallery;
 
-    // Stats
-    if (statsRaw !== undefined) {
-      try {
-        project.stats = typeof statsRaw === 'string' ? JSON.parse(statsRaw) : statsRaw;
-      } catch (e) {
-        // ignore
-      }
+    if (req.body.stats !== undefined) {
+      project.stats = parseJsonField(req.body.stats, []);
     }
 
     await project.save();
     return res.status(200).json(project);
   } catch (error) {
+    console.error(error);
     return res.status(500).json({ message: 'Server error.', error: error.message });
   }
 };
 
 export const deleteProject = async (req, res) => {
-  const { id } = req.params;
   try {
-    const project = await Project.findByPk(id);
+    const project = await Project.findByPk(req.params.id);
     if (!project) {
       return res.status(404).json({ message: 'Project not found.' });
     }
     await project.destroy();
     return res.status(200).json({ message: 'Project deleted successfully.' });
   } catch (error) {
+    console.error(error);
     return res.status(500).json({ message: 'Server error.', error: error.message });
   }
 };

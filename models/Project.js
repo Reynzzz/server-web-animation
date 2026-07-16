@@ -7,52 +7,68 @@ const Project = sequelize.define('Project', {
     primaryKey: true,
     autoIncrement: true,
   },
-  slug: {
-    type: DataTypes.STRING,
-    unique: true,
-    allowNull: false,
-  },
   title: {
     type: DataTypes.STRING,
     allowNull: false,
   },
-  category: {
+  slug: {
     type: DataTypes.STRING,
     allowNull: false,
+    unique: true,
+  },
+  category: {
+    type: DataTypes.STRING,
+    allowNull: true,
   },
   color: {
     type: DataTypes.STRING,
+    allowNull: true,
   },
   year: {
     type: DataTypes.STRING,
+    allowNull: true,
   },
   client: {
     type: DataTypes.STRING,
+    allowNull: true,
   },
   role: {
     type: DataTypes.STRING,
+    allowNull: true,
   },
   description: {
     type: DataTypes.TEXT,
-  },
-  heroImage: {
-    type: DataTypes.TEXT,
-  },
-  gallery: {
-    type: DataTypes.JSON,
-    defaultValue: [],
-  },
-  stats: {
-    type: DataTypes.JSON,
-    defaultValue: [],
-  },
-  video: {
-    type: DataTypes.STRING,
+    allowNull: true,
   },
   galleryCaption: {
     type: DataTypes.TEXT,
-    defaultValue: '',
+    allowNull: true,
   },
+  video: {
+    type: DataTypes.STRING,
+    allowNull: true,
+  },
+  heroImage: {
+    type: DataTypes.STRING,
+    allowNull: true,
+  },
+  gallery: {
+    type: DataTypes.JSONB,
+    allowNull: true,
+    defaultValue: [],
+  },
+  stats: {
+    type: DataTypes.JSONB,
+    allowNull: true,
+    defaultValue: [],
+  },
+  sortOrder: {
+    type: DataTypes.INTEGER,
+    allowNull: false,
+    defaultValue: 0,
+  }
+}, {
+  timestamps: true,
 });
 
 export default Project;
